@@ -38,6 +38,7 @@ class NotificationQueueTable extends Table
         ]);
 
         $this->schema()->columnType('config', 'json');
+        $this->schema()->columnType('transport_config', 'json');
     }
 
     /**
@@ -59,6 +60,7 @@ class NotificationQueueTable extends Table
             ->allowEmpty('notification_identifier')
             ->requirePresence('config', 'create')
             ->notEmpty('config')
+            ->allowEmpty('transport_config')
             ->requirePresence('transport', 'create')
             ->notEmpty('transport')
             ->add('locked', 'valid', ['rule' => 'boolean'])
@@ -87,6 +89,7 @@ class NotificationQueueTable extends Table
             'recipient_user_id' => null,
             'transport' => null,
             'config' => [],
+            'transport_config' => [],
             'locked' => false,
             'send_tries' => 0,
             'sent' => 0,
@@ -289,6 +292,7 @@ class NotificationQueueTable extends Table
             'locale' => Configure::read('locale'),
             'recipient_user_id' => [],
             'config' => [],
+            'transport_config' => [],
             'seen' => 0,
             'transport' => 'onpage',
             'locked' => false,
@@ -319,6 +323,7 @@ class NotificationQueueTable extends Table
                         'recipient_user_id' => $recipientUserId,
                         'transport' => 'email',
                         'config' => $data['config'],
+                        'transport_config' => $data['transport_config'],
                     ];
                     $this->createNotification($identifier, $emailData, true);
                 }
@@ -327,6 +332,7 @@ class NotificationQueueTable extends Table
                     'recipient_user_id' => $data['recipient_user_id'],
                     'transport' => 'email',
                     'config' => $data['config'],
+                    'transport_config' => $data['transport_config'],
                 ];
                 $this->createNotification($identifier, $emailData, true);
             }

@@ -57,6 +57,7 @@ class NotificationContentsController extends AppController {
  */
 	public function add() {
 		$notificationContent = $this->NotificationContents->newEntity();
+		$transports = Configure::read('Notifications.transports');
 		if ($this->request->is('post')) {
             $this->NotificationContents->patchEntity($notificationContent, $this->request->data);
 			if ($this->NotificationContents->save($notificationContent)) {
@@ -66,7 +67,7 @@ class NotificationContentsController extends AppController {
 				$this->Flash->error(__('crud.validation_failed'));
 			}
 		}
-		$this->set(compact('notificationContent'));
+		$this->set(compact('notificationContent', 'transports'));
 		return $this->render('edit');
 	}
 
@@ -81,6 +82,7 @@ class NotificationContentsController extends AppController {
 		$notificationContent = $this->NotificationContents->get($id, [
 			'contain' => []
 		]);
+		$transports = Configure::read('Notifications.transports');
 		if ($this->request->is(['patch', 'post', 'put'])) {
 			$notificationContent = $this->NotificationContents->patchEntity($notificationContent, $this->request->data);
 			if ($this->NotificationContents->save($notificationContent)) {
@@ -90,7 +92,7 @@ class NotificationContentsController extends AppController {
 				$this->Flash->error(__('crud.validation_failed'));
 			}
 		}
-		$this->set(compact('notificationContent'));
+		$this->set(compact('notificationContent', 'transports'));
 	}
 
 }

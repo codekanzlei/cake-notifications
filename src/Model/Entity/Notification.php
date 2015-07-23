@@ -19,6 +19,7 @@ class Notification extends Entity
 		'recipient_user_id' => true,
 		'notification_identifier' => true,
 		'config' => true,
+        'transport_config' => true,
 		'transport' => true,
 		'locked' => true,
 		'sent' => true,

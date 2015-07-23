@@ -19,29 +19,66 @@
             ]);
         ?>
     </fieldset>
-    <fieldset>
-        <legend>E-Mail Transport</legend>
 
-        <?php echo $this->Form->input('email_subject') ?>
-        <?php echo $this->Form->input('email_html', [
-            'type' => 'textarea',
-            'label' => 'Email Body',
-            'class' => 'wysiwyg'
-        ]) ?>
+    <?php if (isset($transports['email'])): ?>
 
-    </fieldset>
-    <fieldset>
-        <legend>Push Message Transport</legend>
+        <fieldset>
+            <legend>E-Mail Transport</legend>
 
-        <?php echo $this->Form->input('push_message') ?>
+            <?php echo $this->Form->input('email_subject') ?>
+            <?php echo $this->Form->input('email_html', [
+                'type' => 'textarea',
+                'label' => 'Email Body',
+                'class' => 'wysiwyg'
+            ]) ?>
 
-    </fieldset>
+        </fieldset>
 
-    <fieldset>
-        <legend>SMS Message Transport</legend>
+    <?php endif; ?>
 
-        <?php echo $this->Form->input('sms_message') ?>
+    <?php if (isset($transports['push_message'])): ?>
 
-    </fieldset>
+        <fieldset>
+            <legend>Push Message Transport</legend>
+
+            <?php echo $this->Form->input('push_message') ?>
+
+        </fieldset>
+
+    <?php endif; ?>
+
+    <?php if (isset($transports['hipchat'])): ?>
+
+        <fieldset>
+
+            <legend>HipChat Transport</legend>
+
+            <?php echo $this->Form->input('hipchat_message') ?>
+
+        </fieldset>
+
+    <?php endif; ?>
+
+    <?php if (isset($transports['sms'])): ?>
+
+        <fieldset>
+            <legend>SMS Message Transport</legend>
+
+            <?php echo $this->Form->input('sms_message') ?>
+
+        </fieldset>
+
+    <?php endif; ?>
+
+    <?php if (isset($transports['onpage'])): ?>
+
+        <fieldset>
+            <legend>OnPage Message Transport</legend>
+
+            <?php echo $this->Form->input('onpage') ?>
+
+        </fieldset>
+
+    <?php endif; ?>
 
 <?= $this->Form->button(__('forms.save'), ['class' => 'btn-success']) ?>

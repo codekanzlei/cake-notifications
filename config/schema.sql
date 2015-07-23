@@ -13,6 +13,7 @@ CREATE TABLE `notification_queue` (
   `recipient_user_id` char(36) NOT NULL,
   `notification_identifier` varchar(255) DEFAULT NULL,
   `config` mediumtext NOT NULL,
+  `transport_config` mediumtext,
   `transport` varchar(45) NOT NULL,
   `locked` tinyint(1) DEFAULT NULL,
   `sent` tinyint(1) DEFAULT NULL,

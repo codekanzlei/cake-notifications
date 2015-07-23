@@ -22,6 +22,7 @@ class NotificationContent extends Entity {
 		'email_text' => true,
 		'push_message' => true,
 		'sms_message' => true,
+		'hipchat_message' => true,
         'onpage' => true
 	];
 

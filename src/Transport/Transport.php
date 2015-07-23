@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Notifications\Transport;
 
 use App\Model\Entity\User;
@@ -35,8 +35,8 @@ abstract class Transport {
 /**
  * Creates a Transport instance based on the given type and config
  *
- * @param string $type email/push_message/sms
- * @param array $config transport-specific configuration options
+ * @param string $type email/push_message/sms/hipchat
+ * @param array $config text transport-specific configuration options
  * @return Transport
  * @throws \InvalidArgumentException
  */
@@ -45,6 +45,7 @@ abstract class Transport {
 			'email' => 'Notifications\Transport\EmailTransport',
 			'push_message' => 'Notifications\Transport\PushMessageTransport',
 			'sms' => 'Notifications\Transport\SmsTransport',
+			'hipchat' => 'Notifications\Transport\HipChatTransport'
 		];
 		if (!isset($map[$type])) {
 			throw new \InvalidArgumentException("{$type} is not a valid transport");
