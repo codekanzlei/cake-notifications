@@ -1,6 +1,6 @@
 #CakePHP 3 Notifications Plugin
 
-[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt) 
+[![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
 
 A CakePHP notification plugin which can send out emails asynchron due to the cakephp-queuesadilla job queue.
 
@@ -11,7 +11,7 @@ A CakePHP notification plugin which can send out emails asynchron due to the cak
 
 ##Installation
 
-###1. Install the plugin via composer 
+###1. Install the plugin via composer
 
 Add the following lines to your application's composer.json:
 
@@ -31,9 +31,13 @@ Or run the following command directly without changing your `composer.json:
 
 ###2. Configure ```config/bootstrap.php``
 
-```Plugin::load('Notifications', ['bootstrap' => false, 'routes' => false]);```
+```Plugin::load('Notifications', ['bootstrap' => false, 'routes' => true]);```
 
-Be sure to set up the the cakephp-queuesadilla plugin as descriped here: [https://cakephp-queuesadilla.readthedocs.io/en/latest/](https://github.com/josegonzalez/cakephp-queuesadilla)
+###3. Configure ```config/app.php```
+
+Be sure to set up the the cakephp-queuesadilla plugin config. You can find an example config here: [https://cakephp-queuesadilla.readthedocs.io/en/latest/](https://github.com/josegonzalez/cakephp-queuesadilla).
+
+Or you can find avalable config options inside your used Engine file (`vendor/josegonzalez/queuesadilla/src/josegonzalez/Queuesadilla/Engine/*Engine.php`) inside the `$baseConfig` property.
 
 ##Usage
 
@@ -73,7 +77,7 @@ Push the email into the queue to send it asynchron
 You can change some of the default options from the cakephp-queuesadilla plugin.
 
 Supported options:
-    
+
 - `attempts` how often the notification will be executed again after a failure
 - `attempts_delay` how long it takes in seconds until the notification will be executed again
 - `delay` how long it takes until the notification will be executed for the first time  in seconds
@@ -88,8 +92,8 @@ Pass a calable as the `$class` parameter. Static and none-static functions are s
 	$email->beforeSendCallback(['Foo', 'bar'], ['first_param', 'second_param'])
 
 ```     
-This will call the `bar` method inside the Foo class with two parameters before the email is send. 
-     
+This will call the `bar` method inside the Foo class with two parameters before the email is send.
+
 ### `afterSendCallback( array|string|null $class null, array $args [] )`
 
 Pass a calable as the `$class` parameter. Static and none-static functions are supported.
