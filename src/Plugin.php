@@ -25,8 +25,17 @@ class Plugin extends BasePlugin
 
         $app->addPlugin('Josegonzalez/CakeQueuesadilla');
 
+        $config = Configure::read('Queuesadilla');
+
+        // Reset Queue config
+        foreach ($config as $configName => $settings) {
+            if (!is_null(Queue::getConfig($configName))) {
+                Queue::drop($configName);
+            }
+        }
+
         // Load Queue config
-        Queue::setConfig(Configure::read('Queuesadilla'));
+        Queue::setConfig($config);
 
         if (!defined('SIGQUIT')) {
             define('SIGQUIT', 'SIGQUIT');
