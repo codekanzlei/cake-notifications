@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Notifications\Notification;
 
 use Cake\Core\Configure;
@@ -40,26 +41,26 @@ abstract class Notification implements NotificationInterface
      *
      * @return bool
      */
-    abstract public function push();
+    abstract public function push(): bool;
 
     /**
      * Send the Notification immediately
      *
      * @param string|array|null $content String with message or array with messages
-     * @return void
+     * @return \Notifications\Notification\Notification
      */
-    abstract public function send($content = null);
+    abstract public function send($content = null): Notification;
 
     /**
      * Constructor
      *
-     * @param array|null $config
-     * @throws InvalidArgumentException
+     * @param array $config Config
+     * @throws \InvalidArgumentException
      */
-    public function __construct($config = null)
+    public function __construct(array $config = null)
     {
         if (Configure::read('Notifications.defaultLocale') === null) {
-            throw new \InvalidArgumentException("Notifications.defaultLocale is not configured");
+            throw new InvalidArgumentException("Notifications.defaultLocale is not configured");
         }
         if (Configure::check('Notifications.queueOptions') && is_array(Configure::read('Notifications.queueOptions'))) {
             $this->_queueOptions = Configure::read('Notifications.queueOptions');
@@ -71,8 +72,10 @@ abstract class Notification implements NotificationInterface
      */
     public function beforeSendCallback($class = null, array $args = [])
     {
-        trigger_error('Notification::beforeSendCallback() is deprecated. '
-            . 'Use Notification::setBeforeSendCallback()/getBeforeSendCallback() instead.', E_DEPRECATED);
+        trigger_error(
+            'Notification::beforeSendCallback() is deprecated. Use Notification::setBeforeSendCallback()/getBeforeSendCallback() instead.',
+            E_USER_DEPRECATED
+        );
 
         if ($class === null) {
             return $this->_beforeSendCallback;
@@ -110,8 +113,10 @@ abstract class Notification implements NotificationInterface
      */
     public function afterSendCallback($class = null, array $args = [])
     {
-        trigger_error('Notification::afterSendCallback() is deprecated. '
-            . 'Use Notification::setAfterSendCallback()/getAfterSendCallback() instead.', E_DEPRECATED);
+        trigger_error(
+            'Notification::afterSendCallback() is deprecated. Use Notification::setAfterSendCallback()/getAfterSendCallback() instead.',
+            E_USER_DEPRECATED
+        );
 
         if ($class === null) {
             return $this->_afterSendCallback;
@@ -149,8 +154,10 @@ abstract class Notification implements NotificationInterface
      */
     public function queueOptions(array $options = null)
     {
-        trigger_error('Notification::queueOptions() is deprecated. '
-            . 'Use Notification::setQueueOptions()/getQueueOptions() instead.', E_DEPRECATED);
+        trigger_error(
+            'Notification::queueOptions() is deprecated. Use Notification::setQueueOptions()/getQueueOptions() instead.',
+            E_USER_DEPRECATED
+        );
 
         if ($options === null) {
             return $this->_queueOptions;
@@ -162,7 +169,7 @@ abstract class Notification implements NotificationInterface
     /**
      * {@inheritdoc}
      */
-    public function getQueueOptions()
+    public function getQueueOptions(): ?array
     {
         return $this->_queueOptions;
     }
@@ -170,7 +177,7 @@ abstract class Notification implements NotificationInterface
     /**
      * {@inheritdoc}
      */
-    public function setQueueOptions(array $options = null)
+    public function setQueueOptions(array $options = null): NotificationInterface
     {
         return $this->__setQueueOptions($options);
     }
@@ -178,10 +185,12 @@ abstract class Notification implements NotificationInterface
     /**
      * {@inheritdoc}
      */
-    public function locale($locale = null)
+    public function locale(string $locale = null)
     {
-        trigger_error('Notification::locale() is deprecated. '
-            . 'Use Notification::setLocale()/getLocale() instead.', E_DEPRECATED);
+        trigger_error(
+            'Notification::locale() is deprecated. Use Notification::setLocale()/getLocale() instead.',
+            E_USER_DEPRECATED
+        );
 
         if ($locale === null) {
             return $this->_locale;
@@ -193,7 +202,7 @@ abstract class Notification implements NotificationInterface
     /**
      * {@inheritdoc}
      */
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->_locale;
     }
@@ -201,7 +210,7 @@ abstract class Notification implements NotificationInterface
     /**
      * {@inheritdoc}
      */
-    public function setLocale($locale = null)
+    public function setLocale($locale = null): NotificationInterface
     {
         return $this->__setLocale($locale);
     }
@@ -212,7 +221,7 @@ abstract class Notification implements NotificationInterface
      * @param string $locale locale - must be i18n conform
      * @return $this
      */
-    private function __setLocale($locale)
+    private function __setLocale(string $locale): NotificationInterface
     {
         $this->_locale = $locale;
 
@@ -225,7 +234,7 @@ abstract class Notification implements NotificationInterface
      * @param array $options Queue options
      * @return $this
      */
-    private function __setQueueOptions($options)
+    private function __setQueueOptions(array $options): NotificationInterface
     {
         $this->_queueOptions = Hash::merge($this->_queueOptions, $options);
 
@@ -236,18 +245,18 @@ abstract class Notification implements NotificationInterface
      * Set callback
      *
      * @param string $type _beforeSendCallback or _afterSendCallback
-     * @param string $class name of the class
+     * @param string|array $class name of the class
      * @param array $args array of arguments
      * @return $this
      */
-    private function __setCallback($type, $class, array $args)
+    private function __setCallback(string $type, $class, array $args): NotificationInterface
     {
         if (!is_array($class)) {
             $this->{$type} = [
                 [
                     'class' => $class,
-                    'args' => $args
-                ]
+                    'args' => $args,
+                ],
             ];
 
             return $this;
@@ -258,14 +267,14 @@ abstract class Notification implements NotificationInterface
             if (is_array($class)) {
                 $class = implode($class);
             }
-            throw new \InvalidArgumentException("{$class} is misformated");
+            throw new InvalidArgumentException("{$class} is misformated");
         }
 
         $this->{$type} = [
             [
                 'class' => [$className, $methodName],
-                'args' => $args
-            ]
+                'args' => $args,
+            ],
         ];
 
         return $this;
@@ -275,16 +284,16 @@ abstract class Notification implements NotificationInterface
      * Add callback
      *
      * @param string $type _beforeSendCallback or _afterSendCallback
-     * @param string $class name of the class
+     * @param string|array $class name of the class
      * @param array $args array of arguments
      * @return $this
      */
-    private function __addCallback($type, $class, array $args)
+    private function __addCallback(string $type, $class, array $args): NotificationInterface
     {
         if (!is_array($class)) {
             $this->{$type}[] = [
                 'class' => $class,
-                'args' => $args
+                'args' => $args,
             ];
 
             return $this;
@@ -295,12 +304,12 @@ abstract class Notification implements NotificationInterface
             if (is_array($class)) {
                 $class = implode($class);
             }
-            throw new \InvalidArgumentException("{$class} is misformated");
+            throw new InvalidArgumentException("{$class} is misformated");
         }
 
         $this->{$type}[] = [
             'class' => [$className, $methodName],
-            'args' => $args
+            'args' => $args,
         ];
 
         return $this;

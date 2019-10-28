@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Notifications\Notification;
 
 interface NotificationInterface
@@ -12,7 +13,7 @@ interface NotificationInterface
      * - Pass a string in the class::method format to call a static method
      * - Pass an array in the [class => method] format to call a non static method
      * @param array $args the method parameters you want to pass to the called method
-     * @return array|null
+     * @return array|self
      */
     public function beforeSendCallback($class = null, array $args = []);
 
@@ -24,7 +25,7 @@ interface NotificationInterface
      * - Pass a string in the class::method format to call a static method
      * - Pass an array in the [class => method] format to call a non static method
      * @param array $args the method parameters you want to pass to the called method
-     * @return array|null
+     * @return array|self
      */
     public function afterSendCallback($class = null, array $args = []);
 
@@ -41,7 +42,7 @@ interface NotificationInterface
      * - delay: how long it takes until the notification will be executed for the first time  in seconds
      * - expires_in: how long the notification will stay in the queue in seconds
      * - queue: name of the queue
-     * @return array|null
+     * @return array|self
      */
     public function queueOptions(array $options = null);
 
@@ -50,14 +51,14 @@ interface NotificationInterface
      *
      * @return bool
      */
-    public function push();
+    public function push(): bool;
 
     /**
      * Get/Set locale used for the notification
      *
      * @deprecated 2.2.0 Use setLocale()/getLocale() instead.
      * @param string $locale The name of the locale to set
-     * @return string|null
+     * @return string|self
      */
-    public function locale($locale = null);
+    public function locale(string $locale = null);
 }

@@ -1,7 +1,12 @@
 <?php
+declare(strict_types = 1);
 
 use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
 use Cake\Mailer\Email;
+use Cake\Mailer\TransportFactory;
+
+require_once 'vendor/cakephp/cakephp/src/basics.php';
 
 Configure::write('debug', true);
 
@@ -20,7 +25,7 @@ if ($vendorPos !== false) {
     $loader = require __DIR__ . '/../vendor/autoload.php';
 }
 
-Cake\Datasource\ConnectionManager::setConfig('test', [
+ConnectionManager::setConfig('test', [
     'className' => 'Cake\Database\Connection',
     'driver' => 'Cake\Database\Driver\Mysql',
     'persistent' => false,
@@ -37,10 +42,12 @@ Configure::write('App.encoding', 'UTF-8');
 Configure::write('Notifications.queueOptions.queue', 'default');
 Configure::write('Notifications.defaultLocale', 'en_US');
 
-Email::setConfigTransport('debug', [
+TransportFactory::setConfig('debug', [
     'className' => 'Debug',
     'charset' => 'utf-8',
 ]);
 Email::setConfig('default', [
     'transport' => 'debug'
 ]);
+
+loadPHPUnitAliases();

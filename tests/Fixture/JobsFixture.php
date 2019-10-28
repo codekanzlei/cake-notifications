@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Notifications\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
@@ -25,6 +26,7 @@ class JobsFixture extends TestFixture
         'delay_until' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'locked' => ['type' => 'integer', 'length' => 1, 'unsigned' => false, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'attempts' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'created_at' => ['type' => 'datetime', 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         '_indexes' => [
             'queue' => ['type' => 'index', 'columns' => ['queue', 'locked'], 'length' => []],
         ],

@@ -1,22 +1,15 @@
 <?php
+declare(strict_types = 1);
 namespace Notifications;
 
-use Cake\Core\Configure;
 use Cake\Core\BasePlugin;
+use Cake\Core\Configure;
 use Cake\Core\PluginApplicationInterface;
-use Cake\Routing\Router;
 use Josegonzalez\CakeQueuesadilla\Queue\Queue;
 
 class Plugin extends BasePlugin
 {
     /**
-     * Plugin name.
-     *
-     * @var string
-     */
-    protected $name = 'Notifications';
-
-    /*
      * {@inheritDoc}
      */
     public function bootstrap(PluginApplicationInterface $app)
@@ -40,17 +33,5 @@ class Plugin extends BasePlugin
         if (!defined('SIGUSR1')) {
             define('SIGUSR1', 'SIGUSR1');
         }
-    }
-
-    /*
-     * {@inheritDoc}
-     */
-    public function routes($routes)
-    {
-        parent::routes($routes);
-
-        Router::plugin('Notifications', function ($routes) {
-            $routes->fallbacks('DashedRoute');
-        });
     }
 }

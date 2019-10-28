@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Notifications\Transport;
 
 use Cake\Core\Configure;
@@ -14,24 +15,24 @@ class EmailTransport extends Transport implements TransportInterface
     /**
      * Send function
      *
-     * @param Notification $notification Notification object
+     * @param \Notifications\Notification\Notification $notification Notification object
      * @param string|array|null $content String with message or array with messages
      * @return \Notifications\Notification\Notification
      */
-    public static function sendNotification(Notification $notification, $content = null)
+    public static function sendNotification(Notification $notification, $content = null): Notification
     {
-        $beforeSendCallback = $notification->beforeSendCallback();
+        $beforeSendCallback = $notification->getBeforeSendCallback();
         self::_performCallback($beforeSendCallback, $notification);
 
-        if ($notification->locale() !== null) {
-            I18n::setLocale($notification->locale());
+        if ($notification->getLocale() !== null) {
+            I18n::setLocale($notification->getLocale());
         } else {
             I18n::setLocale(Configure::read('Notifications.defaultLocale'));
         }
 
         $notification->email()->send($content);
 
-        $afterSendCallback = $notification->afterSendCallback();
+        $afterSendCallback = $notification->getAfterSendCallback();
         self::_performCallback($afterSendCallback);
 
         return $notification;
@@ -40,10 +41,10 @@ class EmailTransport extends Transport implements TransportInterface
     /**
      * Process the job coming from the queue
      *
-     * @param Base $job Queuesadilla base job
+     * @param \josegonzalez\Queuesadilla\Job\Base $job Queuesadilla base job
      * @return \Notifications\Notification\Notification
      */
-    public static function processQueueObject(Base $job)
+    public static function processQueueObject(Base $job): Notification
     {
         $notification = new EmailNotification();
 
@@ -58,7 +59,7 @@ class EmailTransport extends Transport implements TransportInterface
             }
         }
         if ($job->data('locale') !== '') {
-            $notification->locale($job->data('locale'));
+            $notification->setLocale($job->data('locale'));
         }
         $notification->unserialize($job->data('email'));
 

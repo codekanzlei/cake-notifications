@@ -1,18 +1,18 @@
 {
     "name": "codekanzlei/cake-notifications",
     "description": "CakePHP3 Notifications Plugin",
-    "author": "scherer software GmbH & Co. KG",
     "license": "MIT",
     "type": "cakephp-plugin",
-    "homepage": "https://github.com/scherersoftware/cake-notifications",
     "require": {
-      "php": ">=7.0",
-      "cakephp/cakephp": ">=3.6",
-      "josegonzalez/cakephp-queuesadilla": "^0.4.2"
+      "php": ">=7.1",
+      "cakephp/cakephp": ">=3.8",
+      "josegonzalez/cakephp-queuesadilla": "^0.6.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
-        "cakephp/cakephp-codesniffer": "dev-master"
+        "phpunit/phpunit": "^6.0",
+        "phpstan/phpstan": "^0.11",
+        "cakephp/cakephp-codesniffer": "^3.1",
+        "scherersoftware/coding-standard": "^3.1"
     },
     "autoload": {
         "psr-4": {
@@ -25,5 +25,17 @@
             "Notifications\\": "src",
             "Notifications\\Test\\": "tests"
         }
+    },
+    "scripts": {
+        "check": [
+            "@php-check",
+            "@php-check-strict",
+            "@phpstan",
+            "@phpunit"
+        ],
+        "php-check": "vendor/bin/phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src",
+        "php-check-strict": "vendor/bin/phpcs -p --standard=vendor/scherersoftware/coding-standard/scherersoftware ./src",
+        "phpstan": "php -d memory_limit=-1 vendor/bin/phpstan analyse -c phpstan.neon -l 7 ./src",
+        "phpunit": "vendor/bin/phpunit --coverage-clover=coverage.xml"
     }
 }

@@ -1,0 +1,3 @@
+parameters:
+    autoload_files:
+        - ../vendor/cakephp/cakephp/src/basics.php

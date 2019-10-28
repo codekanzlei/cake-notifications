@@ -1,6 +1,8 @@
 <?php
+declare(strict_types = 1);
 namespace Notifications\Test\TestCase\Notification;
 
+use Cake\Datasource\ConnectionManager;
 use Cake\I18n\I18n;
 use Cake\Log\Log;
 use Cake\ORM\TableRegistry;
@@ -45,19 +47,19 @@ class EmailTransportTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'Jobs' => 'plugin.notifications.jobs'
+        'Jobs' => 'plugin.Notifications.Jobs'
     ];
 
     public function setup()
     {
         parent::setUp();
         Log::reset();
-        Log::config('stdout', ['engine' => 'File']);
+        Log::setConfig('stdout', ['engine' => 'File']);
 
-        $dbConfig = \Cake\Datasource\ConnectionManager::config('test');
+        $dbConfig = ConnectionManager::getConfig('test');
 
         Queue::reset();
-        Queue::config([
+        Queue::setConfig([
             'default' => [
                 'engine' => 'josegonzalez\Queuesadilla\Engine\MysqlEngine',
                 'database' => $dbConfig['database'],
@@ -89,8 +91,9 @@ class EmailTransportTest extends TestCase
             'transport' => 'debug',
             'from' => 'foo@bar.com'
         ]);
-        $email->to('foo@bar.com')
-            ->beforeSendCallback(['SomeClassThatDoesNotExists', 'someMethod']);
+        $email
+            ->setTo('foo@bar.com')
+            ->setBeforeSendCallback(['SomeClassThatDoesNotExists', 'someMethod']);
         $return = EmailTransport::sendNotification($email);
 
         $this->assertEquals(SomeClass::$someProperty, null);
@@ -106,8 +109,9 @@ class EmailTransportTest extends TestCase
             'transport' => 'debug',
             'from' => 'foo@bar.com'
         ]);
-        $email->to('foo@bar.com')
-            ->beforeSendCallback('SomeClassThatDoesNotExists::someMethod');
+        $email
+            ->setTo('foo@bar.com')
+            ->setBeforeSendCallback('SomeClassThatDoesNotExists::someMethod');
         $return = EmailTransport::sendNotification($email);
 
         $this->assertEquals(SomeClass::$someProperty, null);
@@ -121,13 +125,14 @@ class EmailTransportTest extends TestCase
             'transport' => 'debug',
             'from' => 'foo@bar.com'
         ]);
-        $email->to('foo@bar.com')
-            ->locale('de_DE')
-            ->beforeSendCallback(['Notifications\Test\TestCase\Notification\SomeClass', 'someMethod'])
-            ->afterSendCallback('Notifications\Test\TestCase\Notification\SomeClass::someStaticMethod');
+        $email
+            ->setTo('foo@bar.com')
+            ->setLocale('de_DE')
+            ->setBeforeSendCallback(['Notifications\Test\TestCase\Notification\SomeClass', 'someMethod'])
+            ->setAfterSendCallback('Notifications\Test\TestCase\Notification\SomeClass::someStaticMethod');
         EmailTransport::sendNotification($email);
 
-        $this->assertEquals(I18n::locale(), 'de_DE');
+        $this->assertEquals(I18n::getLocale(), 'de_DE');
 
         $this->assertEquals(SomeClass::$someProperty, 'was_called');
         $this->assertEquals(SomeClass::$anotherProperty, 'was_called');
@@ -144,13 +149,14 @@ class EmailTransportTest extends TestCase
             'transport' => 'debug',
             'from' => 'foo@bar.com'
         ]);
-        $email->to('foo@bar.com')
-            ->locale('de_AT')
-            ->beforeSendCallback(['Notifications\Test\TestCase\Notification\SomeClass', 'someMethod'])
-            ->afterSendCallback('Notifications\Test\TestCase\Notification\SomeClass::someStaticMethod')
+        $email
+            ->setTo('foo@bar.com')
+            ->setLocale('de_AT')
+            ->setBeforeSendCallback(['Notifications\Test\TestCase\Notification\SomeClass', 'someMethod'])
+            ->setAfterSendCallback('Notifications\Test\TestCase\Notification\SomeClass::someStaticMethod')
             ->push();
 
-        $result = TableRegistry::get('Jobs')->get(1)->toArray();
+        $result = TableRegistry::getTableLocator()->get('Jobs')->get(1)->toArray();
 
         $data = json_decode($result['data'], true);
         $jobItem = [
@@ -165,8 +171,8 @@ class EmailTransportTest extends TestCase
 
         $resultNotification = EmailTransport::processQueueObject($job);
 
-        $this->assertEquals($resultNotification->email()->to(), ['foo@bar.com' => 'foo@bar.com']);
-        $this->assertEquals($resultNotification->locale(), 'de_AT');
+        $this->assertEquals($resultNotification->email()->getTo(), ['foo@bar.com' => 'foo@bar.com']);
+        $this->assertEquals($resultNotification->getLocale(), 'de_AT');
         $this->assertEquals(SomeClass::$someProperty, 'was_called');
         $this->assertEquals(SomeClass::$anotherProperty, 'was_called');
         $this->assertTrue(SomeClass::$wasTheCallableCalled);

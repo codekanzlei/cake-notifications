@@ -1,7 +1,9 @@
 <?php
+declare(strict_types = 1);
 namespace Notifications\Test\TestCase\Notification;
 
 use Cake\Core\Configure;
+use Cake\Datasource\ConnectionManager;
 use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
@@ -18,7 +20,7 @@ class EmailNotificationTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'Jobs' => 'plugin.notifications.jobs'
+        'Jobs' => 'plugin.Notifications.Jobs'
     ];
 
     /**
@@ -30,12 +32,12 @@ class EmailNotificationTest extends TestCase
     {
         parent::setUp();
         Log::reset();
-        Log::config('stdout', ['engine' => 'File']);
+        Log::setConfig('stdout', ['engine' => 'File']);
 
-        $dbConfig = \Cake\Datasource\ConnectionManager::config('test');
+        $dbConfig = ConnectionManager::getConfig('test');
 
         Queue::reset();
-        Queue::config([
+        Queue::setConfig([
             'default' => [
                 'engine' => 'josegonzalez\Queuesadilla\Engine\MysqlEngine',
                 'database' => $dbConfig['database'],
@@ -85,34 +87,36 @@ class EmailNotificationTest extends TestCase
      */
     public function testBeforeSendCallback()
     {
-        $this->Notification->beforeSendCallback('Foo::bar', ['foo', 'bar']);
-        $this->assertEquals([
-            [
-                'class' => 'Foo::bar',
-                'args' => [
-                    'foo',
-                    'bar'
+        $this->deprecated(function() {
+            $this->Notification->beforeSendCallback('Foo::bar', ['foo', 'bar']);
+            $this->assertEquals([
+                [
+                    'class' => 'Foo::bar',
+                    'args' => [
+                        'foo',
+                        'bar'
+                    ]
                 ]
-            ]
-        ], $this->Notification->beforeSendCallback());
+            ], $this->Notification->beforeSendCallback());
 
-        $this->Notification->beforeSendCallback(['Foo', 'bar'], ['foo', 'bar']);
-        $this->assertEquals([
-            [
-                'class' => [
-                    'Foo',
-                    'bar'
-                ],
-                'args' => [
-                    'foo',
-                    'bar'
+            $this->Notification->beforeSendCallback(['Foo', 'bar'], ['foo', 'bar']);
+            $this->assertEquals([
+                [
+                    'class' => [
+                        'Foo',
+                        'bar'
+                    ],
+                    'args' => [
+                        'foo',
+                        'bar'
+                    ]
                 ]
-            ]
-        ], $this->Notification->beforeSendCallback());
+            ], $this->Notification->beforeSendCallback());
+        });
     }
 
     /**
-     * testBeforeSendCallback method
+     * testGetBeforeSendCallback method
      *
      * @return void
      */
@@ -151,36 +155,38 @@ class EmailNotificationTest extends TestCase
      */
     public function testAddBeforeSendCallback()
     {
-        $this->Notification->beforeSendCallback('Foo::bar', ['foo', 'bar']);
-        $this->Notification->addBeforeSendCallback('Foo::bar', ['foo1', 'bar1']);
-        $this->Notification->addBeforeSendCallback(['Foo', 'bar'], ['foo2', 'bar2']);
+        $this->deprecated(function() {
+            $this->Notification->beforeSendCallback('Foo::bar', ['foo', 'bar']);
+            $this->Notification->addBeforeSendCallback('Foo::bar', ['foo1', 'bar1']);
+            $this->Notification->addBeforeSendCallback(['Foo', 'bar'], ['foo2', 'bar2']);
 
-        $this->assertEquals([
-            [
-                'class' => 'Foo::bar',
-                'args' => [
-                    'foo',
-                    'bar'
-                ]
-            ],
-            [
-                'class' => 'Foo::bar',
-                'args' => [
-                    'foo1',
-                    'bar1'
-                ]
-            ],
-            [
-                'class' => [
-                    'Foo',
-                    'bar'
+            $this->assertEquals([
+                [
+                    'class' => 'Foo::bar',
+                    'args' => [
+                        'foo',
+                        'bar'
+                    ]
                 ],
-                'args' => [
-                    'foo2',
-                    'bar2'
-                ]
-            ],
-        ], $this->Notification->beforeSendCallback());
+                [
+                    'class' => 'Foo::bar',
+                    'args' => [
+                        'foo1',
+                        'bar1'
+                    ]
+                ],
+                [
+                    'class' => [
+                        'Foo',
+                        'bar'
+                    ],
+                    'args' => [
+                        'foo2',
+                        'bar2'
+                    ]
+                ],
+            ], $this->Notification->beforeSendCallback());
+        });
     }
 
     /**
@@ -190,33 +196,35 @@ class EmailNotificationTest extends TestCase
      */
     public function testAfterSendCallback()
     {
-        $this->Notification->afterSendCallback('Foo::bar', ['foo', 'bar']);
-        $this->assertEquals([
-            [
-                'class' => 'Foo::bar',
-                'args' => [
-                    'foo',
-                    'bar'
+        $this->deprecated(function() {
+            $this->Notification->afterSendCallback('Foo::bar', ['foo', 'bar']);
+            $this->assertEquals([
+                [
+                    'class' => 'Foo::bar',
+                    'args' => [
+                        'foo',
+                        'bar'
+                    ]
                 ]
-            ]
-        ], $this->Notification->afterSendCallback());
+            ], $this->Notification->afterSendCallback());
 
-        $this->Notification->afterSendCallback(['Foo', 'bar'], [
-            'foo',
-            'bar'
-        ]);
-        $this->assertEquals([
-            [
-                'class' => [
-                    'Foo',
-                    'bar'
-                ],
-                'args' => [
-                    'foo',
-                    'bar'
+            $this->Notification->afterSendCallback(['Foo', 'bar'], [
+                'foo',
+                'bar'
+            ]);
+            $this->assertEquals([
+                [
+                    'class' => [
+                        'Foo',
+                        'bar'
+                    ],
+                    'args' => [
+                        'foo',
+                        'bar'
+                    ]
                 ]
-            ]
-        ], $this->Notification->afterSendCallback());
+            ], $this->Notification->afterSendCallback());
+        });
     }
 
     /**
@@ -262,36 +270,38 @@ class EmailNotificationTest extends TestCase
      */
     public function testAddAfterSendCallback()
     {
-        $this->Notification->addAfterSendCallback('Foo::bar', ['foo', 'bar']);
-        $this->Notification->addAfterSendCallback('Foo::bar', ['foo1', 'bar1']);
-        $this->Notification->addAfterSendCallback(['Foo', 'bar'], ['foo2', 'bar2']);
+        $this->deprecated(function() {
+            $this->Notification->addAfterSendCallback('Foo::bar', ['foo', 'bar']);
+            $this->Notification->addAfterSendCallback('Foo::bar', ['foo1', 'bar1']);
+            $this->Notification->addAfterSendCallback(['Foo', 'bar'], ['foo2', 'bar2']);
 
-        $this->assertEquals([
-            [
-                'class' => 'Foo::bar',
-                'args' => [
-                    'foo',
-                    'bar'
-                ]
-            ],
-            [
-                'class' => 'Foo::bar',
-                'args' => [
-                    'foo1',
-                    'bar1'
-                ]
-            ],
-            [
-                'class' => [
-                    'Foo',
-                    'bar'
+            $this->assertEquals([
+                [
+                    'class' => 'Foo::bar',
+                    'args' => [
+                        'foo',
+                        'bar'
+                    ]
                 ],
-                'args' => [
-                    'foo2',
-                    'bar2'
-                ]
-            ],
-        ], $this->Notification->afterSendCallback());
+                [
+                    'class' => 'Foo::bar',
+                    'args' => [
+                        'foo1',
+                        'bar1'
+                    ]
+                ],
+                [
+                    'class' => [
+                        'Foo',
+                        'bar'
+                    ],
+                    'args' => [
+                        'foo2',
+                        'bar2'
+                    ]
+                ],
+            ], $this->Notification->afterSendCallback());
+        });
     }
 
     /**
@@ -301,8 +311,10 @@ class EmailNotificationTest extends TestCase
      */
     public function testMissformatedCallback()
     {
-        $this->expectException('\InvalidArgumentException');
-        $this->Notification->beforeSendCallback(['Foo'], ['foo', 'bar']);
+        $this->deprecated(function() {
+            $this->expectException('\InvalidArgumentException');
+            $this->Notification->beforeSendCallback(['Foo'], ['foo', 'bar']);
+        });
     }
 
     /**
@@ -323,8 +335,8 @@ class EmailNotificationTest extends TestCase
      */
     public function testEmail()
     {
-        // $emailNotification = new EmailNotification();
-        // $this->assertEquals(new Email(), $emailNotification->email());
+        $emailNotification = new EmailNotification();
+        $this->assertEquals(new Email(), $emailNotification->email());
     }
 
     /**
@@ -334,15 +346,17 @@ class EmailNotificationTest extends TestCase
      */
     public function testQueueOptions()
     {
-        $options = [
-            'attempts' => 20,
-            'attempts_delay' => 2,
-            'delay' => 2,
-            'expires_in' => 10,
-            'queue' => 'email'
-        ];
-        $this->Notification->queueOptions($options);
-        $this->assertEquals($options, $this->Notification->queueOptions());
+        $this->deprecated(function() {
+            $options = [
+                'attempts' => 20,
+                'attempts_delay' => 2,
+                'delay' => 2,
+                'expires_in' => 10,
+                'queue' => 'email'
+            ];
+            $this->Notification->queueOptions($options);
+            $this->assertEquals($options, $this->Notification->queueOptions());
+        });
     }
 
     /**
@@ -370,8 +384,10 @@ class EmailNotificationTest extends TestCase
      */
     public function testLocale()
     {
-        $this->Notification->locale('de_DE');
-        $this->assertEquals('de_DE', $this->Notification->locale());
+        $this->deprecated(function() {
+            $this->Notification->locale('de_DE');
+            $this->assertEquals('de_DE', $this->Notification->locale());
+        });
     }
 
     /**
@@ -394,7 +410,7 @@ class EmailNotificationTest extends TestCase
     {
         $this->Notification->push();
 
-        $jobs = TableRegistry::get('Jobs')->find()
+        $jobs = TableRegistry::getTableLocator()->get('Jobs')->find()
             ->count();
         $this->assertTrue($jobs === 1);
     }
@@ -406,7 +422,8 @@ class EmailNotificationTest extends TestCase
      */
     public function testSend()
     {
-        $email = $this->Notification->to('foo@bar.de')
+        $email = $this->Notification
+            ->setTo('foo@bar.de')
             ->send();
         $this->assertNotEmpty($email);
     }

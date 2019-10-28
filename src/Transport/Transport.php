@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Notifications\Transport;
 
 use InvalidArgumentException;
@@ -10,12 +11,12 @@ abstract class Transport
     /**
      * Performs the before- or after send callback of the notification
      *
-     * @param array                                    $items                Contains the class and function name and optional, function params
+     * @param array $items Contains the class and function name and optional, function params
      * @param \Notifications\Notification\Notification $notificationInstance Reference to the notification instance for a possible callbacks callback
      * @return void
      * @throws \InvalidArgumentException
      */
-    protected static function _performCallback(array $items, Notification $notificationInstance = null)
+    protected static function _performCallback(array $items, Notification $notificationInstance = null): void
     {
         $success = false;
         foreach ($items as $item) {
@@ -24,7 +25,7 @@ abstract class Transport
                 if (is_array($item['class'])) {
                     $class = implode($item['class']);
                 }
-                throw new \InvalidArgumentException("{$class} is not callable");
+                throw new InvalidArgumentException("{$class} is not callable");
             }
 
             $args = [];

@@ -26,9 +26,9 @@ class EmailNotification extends Notification
     /**
      * Constructor
      *
-     * @param array|null $config
+     * @param array|null $config Config
      */
-    public function __construct($config = null)
+    public function __construct(?array $config = null)
     {
         parent::__construct();
         $this->_email = new Email($config);
@@ -37,13 +37,13 @@ class EmailNotification extends Notification
     /**
      * {@inheritdoc}
      */
-    public function push()
+    public function push(): bool
     {
         return Queue::push($this->_transport . '::processQueueObject', [
             'email' => $this->_email->serialize(),
             'beforeSendCallback' => $this->_beforeSendCallback,
             'afterSendCallback' => $this->_afterSendCallback,
-            'locale' => $this->_locale
+            'locale' => $this->_locale,
         ], $this->_queueOptions);
     }
 
@@ -53,7 +53,7 @@ class EmailNotification extends Notification
      * @param string|array|null $content String with message or array with messages
      * @return \Notifications\Notification\Notification
      */
-    public function send($content = null)
+    public function send($content = null): Notification
     {
         return EmailTransport::sendNotification($this, $content);
     }
@@ -63,7 +63,7 @@ class EmailNotification extends Notification
      *
      * @return \Cake\Mailer\Email
      */
-    public function email()
+    public function email(): Email
     {
         return $this->_email;
     }
@@ -75,7 +75,7 @@ class EmailNotification extends Notification
      * @param array  $args arguments
      * @return \Notifications\Notification\EmailNotification
      */
-    public function __call($name, $args)
+    public function __call(string $name, array $args): EmailNotification
     {
         call_user_func_array([$this->_email, $name], $args);
 

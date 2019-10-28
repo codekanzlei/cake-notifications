@@ -1,7 +1,9 @@
 language: php
 
 php:
-  - 7.0
+  - 7.1
+  - 7.2
+  - 7.3
 
 services:
   - mysql
@@ -12,8 +14,7 @@ before_script:
   - mysql -uroot -e "DROP DATABASE IF EXISTS cake_notifications_test; CREATE DATABASE cake_notifications_test;"
 
 script:
-  - vendor/bin/phpunit --coverage-clover=coverage.xml
-  - vendor/bin/phpcs -pn --extensions=php --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src ./tests
+  - composer check
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
