@@ -3,9 +3,12 @@ namespace Notifications\Notification;
 
 use Cake\Mailer\Email;
 use Josegonzalez\CakeQueuesadilla\Queue\Queue;
-use Notifications\Notification\Notification;
+use Notifications\Notification\NotificationInterface;
 use Notifications\Transport\EmailTransport;
 
+/**
+ * @method \Cake\Mailer\Email unserialize(string $data)
+ */
 class EmailNotification extends Notification
 {
 
@@ -19,7 +22,7 @@ class EmailNotification extends Notification
     /**
      * Cake Email object
      *
-     * @var object
+     * @var \Cake\Mailer\Email
      */
     protected $_email;
 
@@ -51,9 +54,9 @@ class EmailNotification extends Notification
      * Send the EmailNotification immediately using the corresponding transport class
      *
      * @param string|array|null $content String with message or array with messages
-     * @return \Notifications\Notification\Notification
+     * @return \Notifications\Notification\NotificationInterface
      */
-    public function send($content = null): Notification
+    public function send($content = null): NotificationInterface
     {
         return EmailTransport::sendNotification($this, $content);
     }

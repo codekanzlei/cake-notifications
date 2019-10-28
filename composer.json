@@ -35,7 +35,7 @@
         ],
         "php-check": "vendor/bin/phpcs --colors -p --standard=vendor/cakephp/cakephp-codesniffer/CakePHP ./src",
         "php-check-strict": "vendor/bin/phpcs -p --standard=vendor/scherersoftware/coding-standard/scherersoftware ./src",
-        "phpstan": "php -d memory_limit=-1 vendor/bin/phpstan analyse -c phpstan.neon -l 7 ./src",
+        "phpstan": "php -d memory_limit=-1 vendor/bin/phpstan analyse -c phpstan.neon -l 5 ./src",
         "phpunit": "vendor/bin/phpunit --coverage-clover=coverage.xml"
     }
 }

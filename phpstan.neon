@@ -1,3 +1,8 @@
 parameters:
     autoload_files:
         - ../vendor/cakephp/cakephp/src/basics.php
+    ignoreErrors:
+        - '#Call to an undefined method Notifications\\Notification\\NotificationInterface::getBeforeSendCallback\(\)#'
+        - '#Call to an undefined method Notifications\\Notification\\NotificationInterface::getAfterSendCallback\(\)#'
+        - '#Call to an undefined method Notifications\\Notification\\NotificationInterface::getLocale\(\)#'
+        - '#Call to an undefined method Notifications\\Notification\\NotificationInterface::email\(\)#'

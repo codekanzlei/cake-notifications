@@ -5,6 +5,7 @@ namespace Notifications\Notification;
 use Cake\Core\Configure;
 use Cake\Utility\Hash;
 use InvalidArgumentException;
+use Notifications\Notification\NotificationInterface;
 
 abstract class Notification implements NotificationInterface
 {
@@ -47,17 +48,16 @@ abstract class Notification implements NotificationInterface
      * Send the Notification immediately
      *
      * @param string|array|null $content String with message or array with messages
-     * @return \Notifications\Notification\Notification
+     * @return \Notifications\Notification\NotificationInterface
      */
-    abstract public function send($content = null): Notification;
+    abstract public function send($content = null): NotificationInterface;
 
     /**
      * Constructor
      *
-     * @param array $config Config
      * @throws \InvalidArgumentException
      */
-    public function __construct(array $config = null)
+    public function __construct()
     {
         if (Configure::read('Notifications.defaultLocale') === null) {
             throw new InvalidArgumentException("Notifications.defaultLocale is not configured");

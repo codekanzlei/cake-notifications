@@ -6,7 +6,7 @@ use Cake\Core\Configure;
 use Cake\I18n\I18n;
 use josegonzalez\Queuesadilla\Job\Base;
 use Notifications\Notification\EmailNotification;
-use Notifications\Notification\Notification;
+use Notifications\Notification\NotificationInterface;
 use Notifications\Transport\TransportInterface;
 
 class EmailTransport extends Transport implements TransportInterface
@@ -15,11 +15,11 @@ class EmailTransport extends Transport implements TransportInterface
     /**
      * Send function
      *
-     * @param \Notifications\Notification\Notification $notification Notification object
+     * @param \Notifications\Notification\NotificationInterface $notification Notification object
      * @param string|array|null $content String with message or array with messages
-     * @return \Notifications\Notification\Notification
+     * @return \Notifications\Notification\NotificationInterface
      */
-    public static function sendNotification(Notification $notification, $content = null): Notification
+    public static function sendNotification(NotificationInterface $notification, $content = null): NotificationInterface
     {
         $beforeSendCallback = $notification->getBeforeSendCallback();
         self::_performCallback($beforeSendCallback, $notification);
@@ -42,9 +42,9 @@ class EmailTransport extends Transport implements TransportInterface
      * Process the job coming from the queue
      *
      * @param \josegonzalez\Queuesadilla\Job\Base $job Queuesadilla base job
-     * @return \Notifications\Notification\Notification
+     * @return \Notifications\Notification\NotificationInterface
      */
-    public static function processQueueObject(Base $job): Notification
+    public static function processQueueObject(Base $job): NotificationInterface
     {
         $notification = new EmailNotification();
 
