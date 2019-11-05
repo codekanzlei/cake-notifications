@@ -1,3 +1,5 @@
 parameters:
     autoload_files:
         - ../vendor/cakephp/cakephp/src/basics.php
+    ignoreErrors:
+        - '#Call to an undefined method Notifications\\Notification\\NotificationInterface::email\(\)#'
