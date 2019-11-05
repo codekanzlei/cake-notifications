@@ -73,7 +73,8 @@ abstract class Notification implements NotificationInterface
     public function beforeSendCallback($class = null, array $args = [])
     {
         trigger_error(
-            'Notification::beforeSendCallback() is deprecated. Use Notification::setBeforeSendCallback()/getBeforeSendCallback() instead.',
+            'Notification::beforeSendCallback() is deprecated.' .
+            'Use Notification::setBeforeSendCallback()/getBeforeSendCallback() instead.',
             E_USER_DEPRECATED
         );
 
@@ -87,7 +88,7 @@ abstract class Notification implements NotificationInterface
     /**
      * {@inheritdoc}
      */
-    public function getBeforeSendCallback()
+    public function getBeforeSendCallback(): array
     {
         return $this->_beforeSendCallback;
     }
@@ -95,7 +96,7 @@ abstract class Notification implements NotificationInterface
     /**
      * {@inheritdoc}
      */
-    public function setBeforeSendCallback($class = null, array $args = [])
+    public function setBeforeSendCallback($class = null, array $args = []): NotificationInterface
     {
         return $this->__setCallback('_beforeSendCallback', $class, $args);
     }
@@ -114,7 +115,8 @@ abstract class Notification implements NotificationInterface
     public function afterSendCallback($class = null, array $args = [])
     {
         trigger_error(
-            'Notification::afterSendCallback() is deprecated. Use Notification::setAfterSendCallback()/getAfterSendCallback() instead.',
+            'Notification::afterSendCallback() is deprecated.' .
+            'Use Notification::setAfterSendCallback()/getAfterSendCallback() instead.',
             E_USER_DEPRECATED
         );
 
@@ -128,7 +130,7 @@ abstract class Notification implements NotificationInterface
     /**
      * {@inheritdoc}
      */
-    public function getAfterSendCallback()
+    public function getAfterSendCallback(): array
     {
         return $this->_afterSendCallback;
     }
@@ -136,7 +138,7 @@ abstract class Notification implements NotificationInterface
     /**
      * {@inheritdoc}
      */
-    public function setAfterSendCallback($class = null, array $args = [])
+    public function setAfterSendCallback($class = null, array $args = []): NotificationInterface
     {
         return $this->__setCallback('_afterSendCallback', $class, $args);
     }
@@ -155,7 +157,8 @@ abstract class Notification implements NotificationInterface
     public function queueOptions(array $options = null)
     {
         trigger_error(
-            'Notification::queueOptions() is deprecated. Use Notification::setQueueOptions()/getQueueOptions() instead.',
+            'Notification::queueOptions() is deprecated.' .
+            'Use Notification::setQueueOptions()/getQueueOptions() instead.',
             E_USER_DEPRECATED
         );
 
@@ -210,7 +213,7 @@ abstract class Notification implements NotificationInterface
     /**
      * {@inheritdoc}
      */
-    public function setLocale($locale = null): NotificationInterface
+    public function setLocale(string $locale = null): NotificationInterface
     {
         return $this->__setLocale($locale);
     }

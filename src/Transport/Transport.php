@@ -12,7 +12,9 @@ abstract class Transport
      * Performs the before- or after send callback of the notification
      *
      * @param array $items Contains the class and function name and optional, function params
-     * @param \Notifications\Notification\NotificationInterface $notificationInstance Reference to the notification instance for a possible callbacks callback
+     * @param \Notifications\Notification\NotificationInterface $notificationInstance Reference to the notification
+     *                                                                                instance for a possible callbacks
+     *                                                                                callback
      * @return void
      * @throws \InvalidArgumentException
      */

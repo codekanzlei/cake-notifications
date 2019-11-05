@@ -14,5 +14,8 @@ interface TransportInterface
      * @param string|array|null $content String with message or array with messages
      * @return \Notifications\Notification\NotificationInterface
      */
-    public static function sendNotification(NotificationInterface $notification, $content = null): NotificationInterface;
+    public static function sendNotification(
+        NotificationInterface $notification,
+        $content = null
+    ): NotificationInterface;
 }
